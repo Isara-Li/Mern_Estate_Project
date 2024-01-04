@@ -21,8 +21,8 @@ app.listen(3000, () => {
   console.log("Server is listening on port 3000!");
 });
 
-app.use("/users", userRouter);
-app.use("/auth", authRouter);
+app.use("/server/users", userRouter);
+app.use("/server/auth", authRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
