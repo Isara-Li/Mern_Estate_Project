@@ -22,14 +22,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    signinStart(state) {
-      state.loading = true;
-    },
-    signinSuccess(state, action) {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
-    },
   },
 });
 
