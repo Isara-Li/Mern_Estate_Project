@@ -41,6 +41,7 @@ export const signin = async (req, res, next) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+    const { password: pass, ...rest } = valid_user._doc;
     res.cookie("access_token", token, {
       httpOnly: true,
       expires: new Date(Date.now() + 3600000),
