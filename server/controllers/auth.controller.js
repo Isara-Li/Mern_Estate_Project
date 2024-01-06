@@ -46,7 +46,14 @@ export const signin = async (req, res, next) => {
       httpOnly: true,
       expires: new Date(Date.now() + 3600000),
     }); // coockie expiration
-    res.status(200).json(valid_user);
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const oauth = async (req, res, next) => {
+  try {
   } catch (error) {
     next(error);
   }

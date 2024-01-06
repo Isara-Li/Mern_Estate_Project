@@ -4,6 +4,7 @@ import { useState } from 'react'	// Import the useState hook
 import { Link,useNavigate } from 'react-router-dom'	// Import the Link component
 import { useDispatch,useSelector } from 'react-redux'
 import { signInFailure,signInStart,signInSuccess } from '../redux/user/userSlice'
+import OAuth from '../components/OAuth'
 
 export default function SignIn() {
   const [formData,setFormData] = useState({})	// Create a state variable for the form data
@@ -29,7 +30,7 @@ export default function SignIn() {
         body: JSON.stringify(formData)
       }) 
       const data = await res.json()
- 
+      console.log(data.success)
       if (data.success === false) {
         signInFailure(data.message) // instead of setError(data.message)
         return;
@@ -57,6 +58,7 @@ export default function SignIn() {
         <input type="text" placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
         <input type="text" placeholder='Password' className='border p-3 rounded-lg' id='password'onChange={handleChange} />
         <button disabled={loading} className='bg-slate-800 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity:50'>{loading ? 'Loading...':'Sign Up'}</button>
+        <OAuth />
       </form>
       <div className='p-3 flex gap-2'>
         <p>Don't have an account ?</p>

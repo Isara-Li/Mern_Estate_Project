@@ -2,6 +2,7 @@ import { set } from 'mongoose'
 import React from 'react'
 import { useState } from 'react'	// Import the useState hook
 import { Link,useNavigate } from 'react-router-dom'	// Import the Link component
+import OAuth from '../components/OAuth'
 
 export default function SignUp() {
   const [formData,setFormData] = useState({})	// Create a state variable for the form data
@@ -54,6 +55,7 @@ export default function SignUp() {
         <input type="text" placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
         <input type="text" placeholder='Password' className='border p-3 rounded-lg' id='password'onChange={handleChange} />
         <button disabled={loading} className='bg-slate-800 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity:50'>{loading ? 'Loading...':'Sign Up'}</button>
+        <OAuth />
       </form>
       <div className='p-3 flex gap-2'>
         <p>Already have an account ?</p>
