@@ -2,12 +2,14 @@ import { set } from 'mongoose'
 import React from 'react'
 import { useState } from 'react'	// Import the useState hook
 import { Link,useNavigate } from 'react-router-dom'	// Import the Link component
+import { useDispatch,useSelector } from 'react-redux'
+import { signInFailure,signInStart,signInSuccess } from '../redux/user/userSlice'
 
 export default function SignIn() {
   const [formData,setFormData] = useState({})	// Create a state variable for the form data
-  const [error,setError] = useState(null)	// Create a state variable for the error message
-  const [loading,setLoading] = useState(false)	// Create a state variable for the loading state
+ const {loading,error} = useSelector(state => state.user) // instead of const [loading,setLoading] = useState(false) and const [error,setError] = useState(null). 'user' was defined in the userSlice.js file 
   const navigate = useNavigate();	// Get the navigate function from the useNavigate hook
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setFormData(
       {
@@ -19,7 +21,8 @@ export default function SignIn() {
   const handleSubmit = async(e) => {
     e.preventDefault(); {/* prevent the page from reloading*/}
     try {
-      setLoading(true)
+      //setLoading(true)
+      dispatch(signInStart())  // instead of setLoading(true)
       const res = await fetch('server/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,19 +31,20 @@ export default function SignIn() {
       const data = await res.json()
  
       if (data.success === false) {
-        setError(data.message)
-        setLoading(false)
+        signInFailure(data.message) // instead of setError(data.message)
         return;
       }
-      setLoading(false)
-      setError(null)
+      //setLoading(false)
+      //setError(null)
+      dispatch(signInSuccess(data)) // instead of setLoading(false) and setError(null)
       console.log('Isara')
       navigate('/');
       
     } 
     catch (error) {
-      setLoading(false)
-      setError(error.message)
+      //setLoading(false)
+      //setError(error.message)
+      dispatch(signInFailure(error.message)) // instead of setLoading(false) and setError(error.message)
     
       console.log(error.message)
     }
