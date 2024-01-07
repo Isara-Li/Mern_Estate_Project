@@ -54,6 +54,47 @@ export const signin = async (req, res, next) => {
 
 export const oauth = async (req, res, next) => {
   try {
+    const user = await User.findOne({ email: req.body.email });
+    console.log(user);
+    if (user) {
+      const token = jwt.sign(
+        {
+          id: user._id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      const { password: pass, ...rest } = user._doc;
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 3600000),
+      });
+      res.status(200).json(rest);
+    } else {
+      // If the user is not in the database, we create a new user
+      const newPassword = Math.random().toString(36).slice(-8);
+      const encryptedPassword = bcryptjs.hashSync(newPassword, 10);
+      const newUser = new User({
+        username: req.body.name.split(" ").join("").toLowerCase(),
+        email: req.body.email,
+        password: encryptedPassword,
+        avatar: req.body.photoURL,
+      });
+      await newUser.save();
+      const token = jwt.sign(
+        {
+          id: newUser._id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      const { password: pass, ...rest } = user._doc;
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 3600000),
+      });
+      res.status(200).json(rest);
+    }
   } catch (error) {
     next(error);
   }
