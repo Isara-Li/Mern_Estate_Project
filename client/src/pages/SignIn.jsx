@@ -8,7 +8,7 @@ import OAuth from '../components/OAuth'
 
 export default function SignIn() {
   const [formData,setFormData] = useState({})	// Create a state variable for the form data
- const {loading,error} = useSelector(state => state.user) // instead of const [loading,setLoading] = useState(false) and const [error,setError] = useState(null). 'user' was defined in the userSlice.js file 
+ const {loading,error} = useSelector((state) => state.user) // instead of const [loading,setLoading] = useState(false) and const [error,setError] = useState(null). 'user' was defined in the userSlice.js file 
   const navigate = useNavigate();	// Get the navigate function from the useNavigate hook
   const dispatch = useDispatch()
   const handleChange = (e) => {
@@ -22,9 +22,9 @@ export default function SignIn() {
   const handleSubmit = async(e) => {
     e.preventDefault(); {/* prevent the page from reloading*/}
     try {
-      //setLoading(true)
+      console.log("Isara")
       dispatch(signInStart())  // instead of setLoading(true)
-      const res = await fetch('server/auth/signin', {
+      const res = await fetch('/server/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -32,13 +32,14 @@ export default function SignIn() {
       const data = await res.json()
       console.log(data.success)
       if (data.success === false) {
-        signInFailure(data.message) // instead of setError(data.message)
+        console.log(data.message)
+        dispatch(signInFailure(data.message)) // instead of setError(data.message)
+        console.log(loading)
         return;
       }
       //setLoading(false)
       //setError(null)
       dispatch(signInSuccess(data)) // instead of setLoading(false) and setError(null)
-      console.log('Isara')
       navigate('/');
       
     } 
@@ -50,14 +51,14 @@ export default function SignIn() {
       console.log(error.message)
     }
   }
-  console.log(formData)
+
   return (
     <div className='p-3 mx-auto max-w-lg'>
       <h1 className='text-3xl text-center font-mono font-semibold my-7'>Sign In</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input type="text" placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
         <input type="text" placeholder='Password' className='border p-3 rounded-lg' id='password'onChange={handleChange} />
-        <button disabled={loading} className='bg-slate-800 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity:50'>{loading ? 'Loading...':'Sign Up'}</button>
+        <button disabled={loading} className='bg-slate-800 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity:50'>{loading ? 'Loading...':'Sign In'}</button>
         <OAuth />
       </form>
       <div className='p-3 flex gap-2'>
