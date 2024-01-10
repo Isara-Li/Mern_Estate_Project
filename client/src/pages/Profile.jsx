@@ -6,6 +6,7 @@ import { app } from '../firebase';
 import { set } from 'mongoose';
 import { updateUserStart,updateUserSuccess,updateUserFailure , deleteUserFailure,deleteUserStart, deleteUserSuccess,  signoutUserStart,signoutUserSuccess,signoutUserFailure} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux'; 
+import {Link} from 'react-router-dom'
 
 export default function Profile() {
   const fileRef = useRef(null) //Ref is a react that allows us to pin one functionality to other components
@@ -129,7 +130,7 @@ export default function Profile() {
       <input type="Etext" placeholder='Email' className='border p-3 rounded-lg' id='email' defaultValue={currentUser.email} onChange={handleChange}/>
       <input type="text" placeholder='Password' className='border p-3 rounded-lg' id='password' onChange={handleChange} />
       <button className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-60'>Update</button>
-
+      <Link className='bg-green-700 text-white p-3 rounded-lg text-center hover:opacity-90' to={"/create-listing"}> Create Listing</Link>
     </form>
     <div className='flex justify-between mt-5'>
       <span onClick={handleUserDelete} className='text-red-700 hover:cursor-pointer'>Delete account</span>
