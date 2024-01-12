@@ -6,8 +6,12 @@ import { getDownloadURL,
   uploadBytesResumable,} from 'firebase/storage';
 import {app} from '../firebase';
 import { set } from 'mongoose';
+import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateListing() {
+  const navigate = useNavigate();
+  const {currentUser} = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [formData, setFormdata] = useState({
     imageURLs: [],
@@ -26,6 +30,8 @@ export default function CreateListing() {
   console.log(formData);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(false); // to show the error message if the upload fails
+  const [error, setError] = useState(false); // to show the error message if the upload fails
+  const [loading, setLoading] = useState(false); // to show the error message if the upload fails
   const handleImageUpload = () => {
       if (files.length > 0 && files.length + formData.imageURLs.length < 7 ) {
             setUploading(true);
@@ -99,12 +105,37 @@ export default function CreateListing() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (formData.imageURLs.length < 1) {
+        setError('Please upload at least one image.');
+        return;
+      }
+      setLoading(true);
+      setError(false); // remove the previous error message
+      const response = await fetch('server/listing/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          userRef:currentUser._id,
+        }),
+      });
+      const data = await response.json();
+      setLoading(false);
+      if (data.success === false) {
+        setError(data.message);
+        //return;
+      }
+      console.log(data);
+      navigate(`/listing/${data._id}`);
       
     } catch (error) {
-      
+      setError(error.message);
+      setLoading(false);
     }
   }
   return (
@@ -204,7 +235,7 @@ export default function CreateListing() {
               />
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
-                <span className='text-xs'>(LKR / month)</span>
+                {formData.type === 'rent' ? <span className='text-xs'>(LKR / month)</span> : ''}
               </div>
             </div>
             <div className='flex items-center gap-2'>
@@ -219,7 +250,7 @@ export default function CreateListing() {
               />
               <div className='flex flex-col items-center'> {/* items center is to center them horizontally */}
                 <p>Discounted price</p>
-                <span className='text-xs'>(LKR / month)</span>
+                {formData.type === 'rent' ? <span className='text-xs'>(LKR / month)</span> : ''}
               </div>
             </div>
           </div>
@@ -254,7 +285,8 @@ export default function CreateListing() {
             </div>
             ))
           }
-        <button className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>Create Listing</button>
+        <button className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading ? 'Creating..' : 'Create Listing'}</button>
+       {error && <p className='text-red-700'>{error}</p>}
         </div>
         
       </form>
