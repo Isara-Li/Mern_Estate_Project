@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.get("/test", test);
 router.post("/update/:id", verrifyToken, updateUser);
-router.delete("/delete/:id", verrifyToken, deleteUser);
+router.delete("/delete/:id", verrifyToken, deleteUser); // Usually this id parameter is not needed. But in this case we need it to check if the user is allowed to delete the user.
 
 export default router;
