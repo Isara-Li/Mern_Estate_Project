@@ -122,6 +122,21 @@ export default function Profile() {
       setShowListingError(true)
     }
   }
+  const deleteList = async (id) => {
+    try {
+      const res = await fetch(`/server/listing/delete/${id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+      if (data.success === false) {
+        setShowListingError(true)
+        return
+      }
+      setShowListing((prev) => prev.filter((listing) => listing._id !== id)) // Removing the removed listing 
+    } catch (error) {
+      setShowListingError(true)
+    }
+  }
 
   return (
     <div className='max-w-lg mx-auto'>
@@ -186,7 +201,7 @@ export default function Profile() {
               </Link>
   
               <div className='flex flex-col item-center'>
-                <button className='text-red-700 uppercase'>Delete</button>
+                <button onClick={()=>deleteList(listing._id)} className='text-red-700 uppercase'>Delete</button>
                 <button className='text-green-700 uppercase'>Edit</button>
               </div>
              
