@@ -16,6 +16,8 @@ export default function Profile() {
   const [fileUploadError,setFileUploadError] = useState(false)
   const [formData,setFormData] = useState({})
   const [success,updateSuccess] = useState(false)
+  const [showListingError, setShowListingError] = useState(false)
+  const [showListing, setShowListing] = useState([])
   const dispatch = useDispatch()
   console.log(formData);
 
@@ -107,6 +109,20 @@ export default function Profile() {
     }
   }
 
+  const handleShowListing = async () => {
+    try {
+       const res = await fetch(`/server/users/listing/${currentUser._id}`)
+        const data = await res.json()
+        if (data.success === false) {
+          setShowListingError(true)
+          return
+        }
+        setShowListing(data)
+    } catch (error) {
+      setShowListingError(true)
+    }
+  }
+
   return (
     <div className='max-w-lg mx-auto'>
     <h1 className='text-3xl font-mono font-semibold text-center py-7'>Profile</h1>
@@ -131,6 +147,7 @@ export default function Profile() {
       <input type="text" placeholder='Password' className='border p-3 rounded-lg' id='password' onChange={handleChange} />
       <button className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-60'>Update</button>
       <Link className='bg-green-700 text-white p-3 rounded-lg text-center hover:opacity-90' to={"/create-listing"}> Create Listing</Link>
+      <button type='button' onClick={handleShowListing} className='bg-green-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-60'>Show my Listings</button>
     </form>
     <div className='flex justify-between mt-5'>
       <span onClick={handleUserDelete} className='text-red-700 hover:cursor-pointer'>Delete account</span>
@@ -142,6 +159,40 @@ export default function Profile() {
       <p className='text-green-700 mt-5'>
         {success ? 'User is updated successfully!' : ''}
       </p>
+      <p className='text-red-700 mt-5'>
+        {showListingError ? 'No listings found!' : ''}
+      </p>
+      {showListing &&
+        showListing.length > 0 &&
+        <div className="flex flex-col gap-4">
+          <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
+          {showListing.map((listing) => (
+            <div
+              key={listing._id}
+              className='border rounded-lg p-3 flex justify-between items-center gap-4 bg-slate-300'
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt='listing cover'
+                  className='h-16 w-16 object-contain'
+                />
+              </Link>
+              <Link
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+  
+              <div className='flex flex-col item-center'>
+                <button className='text-red-700 uppercase'>Delete</button>
+                <button className='text-green-700 uppercase'>Edit</button>
+              </div>
+             
+            </div>
+          ))}
+        </div>}
    
   </div>
   )

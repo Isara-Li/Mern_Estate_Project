@@ -14,7 +14,7 @@ export default function CreateListing() {
   const {currentUser} = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [formData, setFormdata] = useState({
-    imageURLs: [],
+    imageUrls: [],
     name: '',
     description: '',
     address: '',
@@ -33,7 +33,7 @@ export default function CreateListing() {
   const [error, setError] = useState(false); // to show the error message if the upload fails
   const [loading, setLoading] = useState(false); // to show the error message if the upload fails
   const handleImageUpload = () => {
-      if (files.length > 0 && files.length + formData.imageURLs.length < 7 ) {
+      if (files.length > 0 && files.length + formData.imageUrls.length < 7 ) {
             setUploading(true);
            const imagePromises = [];
 
@@ -42,7 +42,7 @@ export default function CreateListing() {
             }
             Promise.all(imagePromises).then((downloadURLs) => {
               console.log(downloadURLs);
-              setFormdata({ ...formData, imageURLs: formData.imageURLs.concat(downloadURLs) });
+              setFormdata({ ...formData, imageUrls: formData.imageUrls.concat(downloadURLs) });
               setUploadError(false);
               setUploading(false);
             }).catch((error) => {
@@ -85,7 +85,7 @@ export default function CreateListing() {
   const handleRemoveImage = (index) => {
     setFormdata({
       ...formData,
-      imageURLs: formData.imageURLs.filter((url, i) => i !== index),
+      imageUrls: formData.imageUrls.filter((url, i) => i !== index),
     });
   }
 
@@ -107,8 +107,10 @@ export default function CreateListing() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Isara");
+    console.log(formData);
     try {
-      if (formData.imageURLs.length < 1) {
+      if (formData.imageUrls.length < 1) {
         setError('Please upload at least one image.');
         return;
       }
@@ -125,6 +127,8 @@ export default function CreateListing() {
         }),
       });
       const data = await response.json();
+      console.log("Liyanage");
+      console.log(data);
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
@@ -265,7 +269,7 @@ export default function CreateListing() {
           </div> {/* type={button} prevents the submission of the whole form */}
           <p className='text-red-700'>{uploadError ? uploadError : ""}</p>
           {
-            formData.imageURLs.length > 0 && formData.imageURLs.map((url, index) => (
+            formData.imageUrls.length > 0 && formData.imageUrls.map((url, index) => (
               <div
               key={url}
               className='flex justify-between p-3 border bg-slate-100 items-center rounded-lg'
