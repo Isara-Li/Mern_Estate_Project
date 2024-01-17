@@ -31,3 +31,28 @@ export const deleteListing = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateListing = async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    return next(new Error("No listing found!"));
+  }
+  if (req.user.id !== listing.userRef) {
+    return next(
+      new Error("You are not allowed to update the listing of this user!")
+    );
+  }
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true, // to get the new updated listing
+        runValidators: true,
+      }
+    );
+    res.status(200).json(updatedListing);
+  } catch (error) {
+    next(error);
+  }
+};
