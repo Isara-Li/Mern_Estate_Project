@@ -100,7 +100,7 @@ export default function Listing() {
               </p>
               {listing.offer && (
                 <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
-                  ${+listing.regularPrice - +listing.discountPrice}
+                  LKR{+listing.regularPrice - +listing.discountPrice}
                 </p>
               )}
             </div>
@@ -113,7 +113,7 @@ export default function Listing() {
                 <FaBed className='text-lg' />
                 {listing.bedrooms > 1
                   ? `${listing.bedrooms} beds `
-                  : `${listing.bedrooms} bed `}
+                  : `${listing.bedrooms} bed `} {/* Singular plural */}
               </li>
               <li className='flex items-center gap-1 whitespace-nowrap '>
                 <FaBath className='text-lg' />
