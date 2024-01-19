@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { set } from 'mongoose'
 import { useState } from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
+import { useSelector } from 'react-redux'
 import SwiperCore from 'swiper';
 import {Navigation} from 'swiper/modules'
 import 'swiper/css/bundle'
@@ -16,13 +17,15 @@ import {
     FaParking,
     FaShare,
   } from 'react-icons/fa'
+import Contact from '../components/Contact'
 
 export default function Listing() {
     const [listing, setListing] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
     const [copied, setCopied] = useState(false);
-
+    const [contactOwner, setContactOwner] = useState(false);
+    const {currentUser} = useSelector((state) => state.user);
     const params = useParams()
     useEffect(() => {
         const fetchListing = async () => {
@@ -130,6 +133,11 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+            {currentUser && !contactOwner && currentUser._id !== listing.userRef && (
+                // If the user is logged in and the user is not the owner of the listing, then show the contact owner button
+            <button onClick={()=> setContactOwner(true)} className='bg-slate-700 text-white rounded-lg hover:opacity-75 p-3'>Contact Owner</button>
+            )}
+            {contactOwner && <Contact listing={listing}/>} {/*Passing the parameters */}
           </div>
         </div>
 
