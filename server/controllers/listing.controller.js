@@ -92,7 +92,7 @@ export const getListings = async (req, res, next) => {
 
     let type = req.query.type;
     if (type === undefined || type === "all") {
-      type = { $in: ["sale", "rent"] }; // if type is not defined, we get all listings. 'in' is a mongoDB operator
+      type = { $in: ["sell", "rent"] }; // if type is not defined, we get all listings. 'in' is a mongoDB operator
     }
 
     const searchterm = req.query.searchterm || "";
@@ -109,7 +109,7 @@ export const getListings = async (req, res, next) => {
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex); //
-
+    console.log(listing);
     return res.status(200).json(listing);
   } catch (error) {
     next(error);
