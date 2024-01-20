@@ -1,23 +1,20 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { set } from 'mongoose'
-import { useState } from 'react'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
-import {Navigation} from 'swiper/modules'
-import 'swiper/css/bundle'
+import { useSelector } from 'react-redux';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css/bundle';
 import {
-    FaBath,
-    FaBed,
-    FaChair,
-    FaMapMarkedAlt,
-    FaMapMarkerAlt,
-    FaParking,
-    FaShare,
-  } from 'react-icons/fa'
-import Contact from '../components/Contact'
+  FaBath,
+  FaBed,
+  FaChair,
+  FaMapMarkedAlt,
+  FaMapMarkerAlt,
+  FaParking,
+  FaShare,
+} from 'react-icons/fa';
+import Contact from '../components/Contact';
 
 export default function Listing() {
     const [listing, setListing] = useState(null)
@@ -48,6 +45,10 @@ export default function Listing() {
         };
         fetchListing();
       },[]);
+      useEffect(() => {
+        SwiperCore.use([Navigation]);
+      }, []);
+    
     
   return (
     <main>
@@ -103,7 +104,7 @@ export default function Listing() {
               </p>
               {listing.offer && (
                 <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
-                  LKR{+listing.regularPrice - +listing.discountPrice}
+                  LKR {+listing.regularPrice - +listing.discountPrice}
                 </p>
               )}
             </div>
