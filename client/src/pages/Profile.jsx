@@ -74,6 +74,7 @@ export default function Profile() {
         dispatch(updateUserFailure(data.message))
       }
       dispatch(updateUserSuccess(data))
+      Swal.fire("Profile updated successfully!");
       updateSuccess(true)
     } catch (error) {
        dispatch(updateUserFailure(error.message))
@@ -98,14 +99,27 @@ export default function Profile() {
 
   const handleSignout = async () => {
     try {
-      dispatch( signoutUserStart())
-      const res = await fetch('server/auth/signout');
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(signoutUserFailure(data.message))
-        return
-            }
-      dispatch(signoutUserSuccess(data))
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to Sign Out!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sign Out"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          dispatch( signoutUserStart())
+          const res = await fetch('server/auth/signout');
+          const data = await res.json();
+          if (data.success === false) {
+            dispatch(signoutUserFailure(data.message))
+            return
+                }
+          dispatch(signoutUserSuccess(data))
+         
+        }
+      });
     } catch (error) {
       dispatch(signoutUserFailure(error.message))
     }
@@ -147,7 +161,7 @@ export default function Profile() {
           setShowListing((prev) => prev.filter((listing) => listing._id !== id)) // Removing the removed listing 
           Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
+            text: "Your listing has been deleted.",
             icon: "success"
           });
         }
