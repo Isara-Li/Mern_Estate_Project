@@ -7,6 +7,7 @@ import { set } from 'mongoose';
 import { updateUserStart,updateUserSuccess,updateUserFailure , deleteUserFailure,deleteUserStart, deleteUserSuccess,  signoutUserStart,signoutUserSuccess,signoutUserFailure} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux'; 
 import {Link} from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export default function Profile() {
   const fileRef = useRef(null) //Ref is a react that allows us to pin one functionality to other components
@@ -19,6 +20,7 @@ export default function Profile() {
   const [showListingError, setShowListingError] = useState(false)
   const [showListing, setShowListing] = useState([])
   const dispatch = useDispatch()
+
   console.log(formData);
 
   console.log(progress);
@@ -124,15 +126,32 @@ export default function Profile() {
   }
   const deleteList = async (id) => {
     try {
-      const res = await fetch(`/server/listing/delete/${id}`, {
-        method: 'DELETE',
-      })
-      const data = await res.json()
-      if (data.success === false) {
-        setShowListingError(true)
-        return
-      }
-      setShowListing((prev) => prev.filter((listing) => listing._id !== id)) // Removing the removed listing 
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await fetch(`/server/listing/delete/${id}`, {
+            method: 'DELETE',
+          })
+          const data = await res.json()
+          if (data.success === false) {
+            setShowListingError(true)
+            return
+          }
+          setShowListing((prev) => prev.filter((listing) => listing._id !== id)) // Removing the removed listing 
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        }
+      });
     } catch (error) {
       setShowListingError(true)
     }
