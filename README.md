@@ -1,5 +1,3 @@
-Certainly! Here's a GitHub project description for the MERN Real Estate Project:
-
 ---
 
 # MERN Real Estate Project
