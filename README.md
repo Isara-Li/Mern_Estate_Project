@@ -2,23 +2,25 @@ Certainly! Here's a GitHub project description for the MERN Real Estate Project:
 
 ---
 
-# MERN Real Estate Project Course
+# MERN Real Estate Project
 
-Welcome to the Full Stack MERN Real Estate Project Course! In this comprehensive course, you'll embark on a journey to develop and deploy a robust web application with advanced authentication and search functionality. This project will guide you in creating a full-stack Real Estate application, akin to industry-leading platforms such as Realtor or other prominent Real Estate websites.
+This project focuses on developing a comprehensive full-stack Real Estate application, inspired by leading industry platforms like Realtor and other prominent Real Estate websites.
 
 ## Technologies Used:
 
 - React
 - MongoDB
+- Google Firebase
 - Express
 - Node.js
 - Tailwind CSS
 
+
 ## Key Features:
 
-- **Modern Authentication:** Learn to implement both email and password authentication using JSON Web Tokens (JWT) and integrate Google OAuth for seamless user access.
+- **Modern Authentication:** Both email and password authentication using JSON Web Tokens (JWT) and integrate Google OAuth for seamless user access.
 
-- **State Management:** Utilize Redux Toolkit for effective state management, ensuring a secure and smooth user experience. Protected pages, like the user profile page, will be secured on both the client and server sides.
+- **State Management:** Utilize Redux Toolkit for effective state management, ensuring a secure and smooth user experience. Protected pages, like the user profile page, is secured on both the client and server sides.
 
 - **User Profile Management:** Allow users to update their information, including username, email, password, and profile images.
 
@@ -30,12 +32,7 @@ Welcome to the Full Stack MERN Real Estate Project Course! In this comprehensive
 
 ## Deployment:
 
-Deploy your fully functional MERN stack Real Estate application for free using the Render platform. Showcase your creation to others or include it in your portfolio to highlight your skills.
-
-## Prerequisites:
-
-A basic understanding of web development is recommended to make the most out of this course.
-
+Deployed this fully functional MERN stack Real Estate application for free using the Render platform.
 ---
 
-Feel free to customize the description further based on specific details or additional features of your MERN Real Estate project.
+
